@@ -1,0 +1,17 @@
+{
+  "name": "buildbotstatus",
+  "version": "0.0.1",
+  "description": "Simple webapp to fetch and browse the status of Servo builds",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "npm install --path ./app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "browser-sync": "^2.23.6",
+    "gulp": "^3.9.1"
+  },
+  "dependencies": {}
+}

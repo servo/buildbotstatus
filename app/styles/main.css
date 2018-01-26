@@ -1,0 +1,84 @@
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+body {
+  background: #f5f6f7;
+  font-family: Roboto, sans-serif;
+  color: #333;
+}
+
+.hero-unit {
+  margin: 50px auto 0 auto;
+  width: 50%;
+  font-weight: 200;
+  line-height: 30px;
+  background-color: #fff;
+  color: #757575;
+  border-radius: 6px;
+  padding: 60px;
+  box-shadow: 0 1px 8px 0 rgba(0,0,0,.2),0 3px 4px 0 rgba(0,0,0,.14),0 3px 3px -2px rgba(0,0,0,.12);
+  font: 400 16px/24px Roboto,sans-serif;
+}
+
+.hero-unit h1 {
+  color: #757575;
+  font-size: 48px;
+  line-height: 62px;
+  font-weight: 300;
+  max-width: 80%;
+  margin-bottom: 40px;
+}
+
+input {
+  border: 1px solid #ebebeb;
+  border-radius: 2px;
+  color: #212121;
+  font: 16px/20px Roboto,sans-serif;
+  margin: 0;
+  max-width: 100%;
+  outline: 0;
+  padding: 7px;
+  transition: border-color .2s;
+  vertical-align: middle;
+}
+
+button {
+  background-color: #039be5;
+  color: #fff;
+  transition: box-shadow .2s;
+  font-size: 14px;
+  line-height: 20px;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  font-weight: 500;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  border-radius: 2px;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0px;
+}
+
+button:hover {
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.39);
+}
+
+.hidden {
+  display: none;
+}
+
+

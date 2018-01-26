@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Servo CI Status</title>
+
+    <link rel="stylesheet" href="styles/main.css">
+
+  </head>
+  <body>
+    <!--[if IE]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://www.mozilla.org/en-US/firefox/new/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class="hero-unit">
+      <h1>Servo CI status</h1>
+      <input id="pull-request-id" type="text" placeholder="Pull request ID">
+      <button id="get-status">Get status</button>
+      <button id="cancel" class="hidden">Cancel</button>
+      <p id="in-progress" class="hidden">Fetching builds status. This may take a few minutes...</p>
+    </div>
+
+    <script src="node_modules/sw-toolbox/companion.js" data-service-worker="sw.js"></script>
+    <script src="scripts/vendor/threads.browser.js" type="module"></script>
+    <script src="scripts/main.js" type="module"></script>
+  </body>
+</html>

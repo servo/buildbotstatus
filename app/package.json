@@ -1,0 +1,9 @@
+{
+  "name": "buildbotstatus_app",
+  "version": "0.0.1",
+  "description": "Simple webapp to fetch and browse the status of Servo builds",
+  "dependencies": {
+    "sw-toolbox": "^3.6.0",
+    "threads": "^0.10.1"
+  }
+}
