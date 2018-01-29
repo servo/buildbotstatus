@@ -1,6 +1,6 @@
 import { BuildbotClient } from './buildbot_client.js';
 
-const BUILD_BASE_PATH = 'http://build.servo.org/builders/android/builds/';
+const BUILD_BASE_PATH = 'http://build.servo.org/builders/';
 
 const UI = {
   init() {
@@ -84,7 +84,7 @@ const UI = {
       let td = document.createElement('td');
       let label = build.builder;
       let a = document.createElement('a');
-      a.href = `${BUILD_BASE_PATH}${build.id}`;
+      a.href = `${BUILD_BASE_PATH}${build.builder}/builds/${build.id}`;
       a.title = build.builder;
       const title = document.createTextNode(build.builder);
       a.appendChild(title);
