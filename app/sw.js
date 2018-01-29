@@ -1,4 +1,4 @@
-importScripts('node_modules/sw-toolbox/sw-toolbox.js');
+importScripts('scripts/vendor/sw-toolbox/sw-toolbox.js');
 
 self.toolbox.precache([
   'index.html',
