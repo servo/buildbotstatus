@@ -2,13 +2,15 @@ importScripts('node_modules/sw-toolbox/sw-toolbox.js');
 
 self.toolbox.precache([
   'index.html',
-  '/styles/main.css',
-  '/scripts/build.js',
-  '/scripts/buildbot_client.js',
-  '/scripts/config.js',
-  '/scripts/main.js',
-  '/scripts/ui.js',
-  '/scripts/vendor/threads.browser.js'
+  './img/less.png',
+  './img/more.png',
+  './styles/main.css',
+  './scripts/build.js',
+  './scripts/buildbot_client.js',
+  './scripts/config.js',
+  './scripts/main.js',
+  './scripts/ui.js',
+  './scripts/vendor/threads.browser.js'
 ]);
 
 toolbox.router.get('/(.*)', function(request, values, options) {

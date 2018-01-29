@@ -2,6 +2,7 @@
  * @typedef BuildData
  * @property {number} id - The build unique identifier.
  * @property {string} builder - The owner of the build.
+ * @property {string} revision = The build revision hash.
  * @property {bool} success - Whether the build succeeded or not.
  * @property {bool} inprogress - Whether the build is still in progress or not.
  * @property {number} start - The build's start timestamp.
@@ -20,6 +21,7 @@ class Build {
   constructor(data) {
     this._id = data.id;
     this._builder = data.builder;
+    this._revision = data.revision;
     this._success = data.success;
     this._inprogress = data.inprogress;
     this._start = data.start;
@@ -32,6 +34,10 @@ class Build {
 
   get builder() {
     return this._builder;
+  }
+
+  get revision() {
+    return this._revision;
   }
 
   get success() {

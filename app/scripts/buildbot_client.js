@@ -31,44 +31,56 @@ export class BuildbotClient {
    * @return {Promise<>} A promise resolving with the list of builds associated with the given pull request ID.
    * @throws {Promise<>} The promise could reject with an error if something goes wrong fetching the builds.
    */
-  fetchBuilds(pullRequestId) {
+  fetchBuilds(pullRequestId, onprogressCb, ondoneCb) {
     this._pullRequestId = pullRequestId;
+    this._onprogressCb = onprogressCb;
+    this._ondoneCb = ondoneCb;
     // Create a pool of worker threads. Each build request will be passed to the
     // pool which it will queue and pass to the next idle worker thread.
     this._pool = new thread.Pool(this._maxWorkers);
     // For each build we check if it belongs to the pull request corresponding
     // to the given ID. And, in that case, we store the build for later return
     // and display.
-    this._builds = [];
     return this._fetchBuilders()
     .then(builders => {
       // FIXME (ferjm): check that we really want to fetch from all the builders.
       this._pool.run(this._fetchBuildRunnable);
       return this._fetchBuilds(builders, CURRENT);
     })
-    .then(({builders, buildsData}) => {
+    .then(({builders}) => {
       // For each builder we get the list of current and cached builds.
       // We start with the current builds, so we can display their progress
       // as soon as possible.
-      console.log("Current builds", buildsData);
       return this._fetchBuilds(builders, CACHED);
     })
-    .then(({builders, buildsData}) => {
-      this._pool.killAll();
-      console.log("Done", this._builds);
-      return this._builds;
+    .then(({builders}) => {
+      console.log("Done");
+      if (this._ondoneCb) {
+        this._ondoneCb();
+      }
+      this._cleanup();
     })
     .catch(error => {
-      this._pool.killAll();
       console.error(error);
+      if (this._ondoneCb) {
+        this._ondoneCb(error);
+      }
+      this._cleanup();
     });
   }
 
-  cancel() {
+  _cleanup() {
+    this._onprogressCb = null;
+    this._ondoneCb = null;
+    this._pullRequestId = null;
     if (!this._pool) {
       return;
     }
     this._pool.killAll();
+  }
+
+  cancel() {
+    this._cleanup();
   }
 
   onprogress(build) {
@@ -85,12 +97,15 @@ export class BuildbotClient {
     const _build = new Build({
       id: build.number,
       builder: build.builderName,
+      revision: build.properties[8][1],
       success: build.text[1] == SUCCESS,
       inprogress: build.inprogress,
       start: build.times[0],
       end: build.times[1]
     });
-    this._builds.push(_build);
+    if (this._onprogressCb) {
+      this._onprogressCb(_build);
+    }
   }
 
   _fetchBuilders() {
@@ -113,8 +128,8 @@ export class BuildbotClient {
                          .on('progress', this._onprogress)
                          .promise();
       }));
-    })).then(buildsData => {
-      return { builders, buildsData };
+    })).then(() => {
+      return { builders };
     });
   }
 
