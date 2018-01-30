@@ -12,5 +12,7 @@
     "browser-sync": "^2.23.6",
     "gulp": "^3.9.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "gulp-serve": "^1.4.0"
+  }
 }

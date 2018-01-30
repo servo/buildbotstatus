@@ -1,9 +1,12 @@
 var gulp        = require('gulp');
 var browserSync = require('browser-sync').create();
 var reload      = browserSync.reload;
+var serve       = require('gulp-serve');
 
 // Static server.
-gulp.task('serve', function() {
+gulp.task('serve', serve('app'));
+
+gulp.task('watch', function() {
   browserSync.init({
     server: {
       baseDir: './app'
