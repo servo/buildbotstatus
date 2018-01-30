@@ -1,16 +1,12 @@
-importScripts('scripts/vendor/sw-toolbox/sw-toolbox.js');
+importScripts('vendor/sw-toolbox/sw-toolbox.js');
 
 self.toolbox.precache([
   'index.html',
   './img/less.png',
   './img/more.png',
   './styles/main.css',
-  './scripts/build.js',
-  './scripts/buildbot_client.js',
-  './scripts/config.js',
-  './scripts/main.js',
-  './scripts/ui.js',
-  './scripts/vendor/threads.browser.js'
+  './app.js',
+  './vendor/threads.browser.js'
 ]);
 
 toolbox.router.get('/(.*)', function(request, values, options) {
