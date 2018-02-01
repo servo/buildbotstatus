@@ -23,7 +23,7 @@ const UI = {
       this._elements[name] = document.getElementById(id);
     });
 
-    this.initWorkerSelect(this._elements.workers);
+    this._initWorkersSelect(this._elements.workers);
 
     this._elements.getStatus.addEventListener('click', this.getStatus.bind(this));
     this._elements.cancel.addEventListener('click', this.cancel.bind(this));
@@ -171,16 +171,17 @@ const UI = {
     this._cleanup();
   },
 
-  initWorkerSelect(runningWorkersElem) {
+  _initWorkersSelect(select) {
+    const firstOption = select.firstElementChild;
+    firstOption.value = DEFAULT_WORKERS;
+    firstOption.textContent =
+      `Number of workers (defaults to ${DEFAULT_WORKERS})`;
     Array.from({ length: MAX_WORKERS }).forEach((_v, k) => {
       const number = k + 1;
       const option = document.createElement('option');
       option.value = number;
       option.text = number;
-      if (number === DEFAULT_WORKERS) {
-        option.selected = true;
-      }
-      runningWorkersElem.appendChild(option);
+      select.appendChild(option);
     })
   }
 };

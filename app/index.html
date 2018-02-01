@@ -13,13 +13,15 @@
     <!--[if IE]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://www.mozilla.org/en-US/firefox/new/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-
+    <div id="settings-icon" class="settings-icon"></div>
+    <div id="settings" class="settings">
+      <h1>Settings</h1>
+      <select id="workers">
+        <option value="" disabled selected>Number of workers</option>
+      </select>
+    </div>
     <div class="hero-unit">
       <h1>Servo CI status</h1>
-      <div>
-        <span>Workers number: </span>
-        <select id="workers"></select>
-      </div>
       <input id="pull-request-id" type="text" placeholder="Pull request ID">
       <button id="get-status">Get status</button>
       <button id="cancel" class="hidden">Cancel</button>
