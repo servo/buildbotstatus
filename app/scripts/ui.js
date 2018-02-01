@@ -1,11 +1,13 @@
 import { BuildbotClient } from './buildbot_client.js';
+import { DEFAULT_WORKERS, MAX_WORKERS } from './config';
 
 const BUILD_BASE_PATH = 'http://build.servo.org/builders/';
 
 const UI = {
   init() {
     this._elements = {};
-    ['pull-request-id',
+    ['workers',
+     'pull-request-id',
      'get-status',
      'in-progress',
      'cancel',
@@ -20,6 +22,8 @@ const UI = {
       });
       this._elements[name] = document.getElementById(id);
     });
+
+    this.initWorkerSelect(this._elements.workers);
 
     this._elements.getStatus.addEventListener('click', this.getStatus.bind(this));
     this._elements.cancel.addEventListener('click', this.cancel.bind(this));
@@ -37,12 +41,13 @@ const UI = {
     ['cancel', 'inProgress', 'content', 'spinner'].forEach(name => {
       this._elements[name].classList.remove('hidden');
     });
+    this._elements.workers.disabled = true;
 
     this._elements.builds.textContent = "";
     this._builds = {};
     this._startTime = Date.now();
 
-    this._client = new BuildbotClient();
+    this._client = new BuildbotClient(this._elements.workers.value);
     this._client.fetchBuilds(id, this.onprogress.bind(this), this.ondone.bind(this));
   },
 
@@ -51,6 +56,7 @@ const UI = {
       this._elements[name].classList.add('hidden');
     });
     this._elements.getStatus.classList.remove('hidden');
+    this._elements.workers.disabled = undefined;
 
     this._client.cancel();
 
@@ -151,6 +157,7 @@ const UI = {
     ['getStatus', 'time'].forEach(name => {
       this._elements[name].classList.remove('hidden');
     });
+    this._elements.workers.disabled = undefined;
 
     if (!Object.keys(this._builds).length) {
       this._elements.spinner.classList.add('hidden');
@@ -162,6 +169,19 @@ const UI = {
     }
 
     this._cleanup();
+  },
+
+  initWorkerSelect(runningWorkersElem) {
+    Array.from({ length: MAX_WORKERS }).forEach((_v, k) => {
+      const number = k + 1;
+      const option = document.createElement('option');
+      option.value = number;
+      option.text = number;
+      if (number === DEFAULT_WORKERS) {
+        option.selected = true;
+      }
+      runningWorkersElem.appendChild(option);
+    })
   }
 };
 
