@@ -56,3 +56,7 @@ gulp.task('dev', ['build'], function () {
 
   gulp.watch(entries, ['watch']);
 });
+
+gulp.task('serve', ['build'], serve('dist'));
+
+gulp.task('default', ['clean', 'copy', 'build', 'serve']);
