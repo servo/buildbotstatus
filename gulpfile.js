@@ -45,7 +45,7 @@ gulp.task('watch', ['build'], function (done) {
   done();
 })
 
-gulp.task('default', ['clean', 'copy', 'build'], function () {
+gulp.task('dev', ['build'], function () {
   browserSync.init({
     server: {
       baseDir: './dist'
