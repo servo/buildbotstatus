@@ -44,10 +44,16 @@ export class BuildbotClient {
     return this._fetchBuilders()
     .then(builders => {
       // FIXME (ferjm): check that we really want to fetch from all the builders.
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage('current');
+      }
       this._pool.run(this._fetchBuildRunnable);
       return this._fetchBuilds(builders, CURRENT);
     })
     .then(({builders}) => {
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage('cached');
+      }
       // For each builder we get the list of current and cached builds.
       // We start with the current builds, so we can display their progress
       // as soon as possible.
@@ -134,7 +140,7 @@ export class BuildbotClient {
   }
 
   _fetchBuildRunnable(data, done, progress) {
-    return fetch(data.path)
+    return fetch(data.path, { mode: 'cors' })
     .then(res => {
       return res.json();
     }).then(json => {
