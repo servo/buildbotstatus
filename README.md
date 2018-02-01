@@ -12,3 +12,8 @@ You can serve this tool from http://localhost:3000 just by running this command:
 ```bash
 gulp
 ```
+
+You can develop this tool from http://localhost:3000 just by running this command:
+```bash
+gulp dev
+```
