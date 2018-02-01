@@ -4,6 +4,7 @@ var browserify  = require('browserify');
 var babelify    = require('babelify');
 var source      = require('vinyl-source-stream');
 var clean       = require('gulp-clean');
+var browserSync = require('browser-sync').create();
 
 gulp.task('clean', function(){
   return gulp.src(['dist/*'], {read:false})
@@ -15,21 +16,43 @@ gulp.task('copy', ['clean'], function() {
     .pipe(gulp.dest('dist'));
 });
 
+var scriptsEntries = [
+  'app/scripts/build.js',
+  'app/scripts/buildbot_client.js',
+  'app/scripts/config.js',
+  'app/scripts/main.js',
+  'app/scripts/ui.js'
+];
+
+var htmlEntries = ['app/index.html'];
+
+var stylesEntries = [
+  'app/styles/main.css'
+];
+
 gulp.task('build', ['copy'], function () {
-  var entries = [
-    'app/scripts/build.js',
-    'app/scripts/buildbot_client.js',
-    'app/scripts/config.js',
-    'app/scripts/main.js',
-    'app/scripts/ui.js'
-  ];
-  return browserify({entries: entries, debug: true})
-      .transform("babelify", { presets: ["es2015"] })
-      .bundle()
-      .pipe(source('app.js'))
-      .pipe(gulp.dest('./dist/'));
+  return browserify({
+    entries: scriptsEntries,
+    debug: true
+  }).transform("babelify", { presets: ["es2015"] })
+    .bundle()
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('serve', ['build'], serve('dist'));
+gulp.task('watch', ['build'], function (done) {
+  browserSync.reload();
+  done();
+})
 
-gulp.task('default', ['clean', 'copy', 'build', 'serve']);
+gulp.task('default', ['clean', 'copy', 'build'], function () {
+  browserSync.init({
+    server: {
+      baseDir: './dist'
+    }
+  });
+
+  const entries = scriptsEntries.concat(htmlEntries).concat(stylesEntries);
+
+  gulp.watch(entries, ['watch']);
+});

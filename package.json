@@ -13,5 +13,8 @@
     "gulp-clean": "^0.4.0",
     "gulp-serve": "^1.4.0",
     "vinyl-source-stream": "^2.0.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.23.6"
   }
 }
