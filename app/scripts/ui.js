@@ -1,4 +1,5 @@
 import { BuildbotClient } from './buildbot_client.js';
+import { GithubClient } from './github.js';
 import { DEFAULT_WORKERS, MAX_WORKERS } from './config';
 
 const BUILD_BASE_PATH = 'http://build.servo.org/builders/';
@@ -16,7 +17,11 @@ const UI = {
      'not-found',
      'time',
      'seconds',
-     'builds'].forEach(id => {
+     'builds',
+     'github',
+     'pr-state',
+     'pr-author',
+     'pr-title'].forEach(id => {
       const name = id.replace(/-(.)/g, function(str, p1) {
         return p1.toUpperCase();
       });
@@ -48,13 +53,34 @@ const UI = {
     this._startTime = Date.now();
 
     this._client = new BuildbotClient(this._elements.workers.value);
-    this._client.fetchBuilds(id, this.onprogress.bind(this), this.ondone.bind(this));
+    this._client.fetchBuilds(id,
+                             this.onprogress.bind(this),
+                             this.ondone.bind(this));
+
+    this._github = new GithubClient();
+    this._github.fetchPullRequestInfo(id)
+    .then(pullRequest => {
+      if (!pullRequest) {
+        /// XXX show pull request not found error.
+        return this.cancel();
+      }
+      this._showPullRequest(pullRequest);
+    }).catch(e => {
+      console.error(e);
+      // XXX show error feedback.
+    });
   },
 
   cancel() {
-    ['cancel', 'inProgress', 'content', 'spinner', 'notFound'].forEach(name => {
+    ['cancel',
+      'inProgress',
+      'content',
+      'spinner',
+      'notFound',
+      'github'].forEach(name => {
       this._elements[name].classList.add('hidden');
     });
+    this._elements.prState.classList.remove('state');
     this._elements.getStatus.classList.remove('hidden');
     this._elements.workers.disabled = undefined;
 
@@ -67,6 +93,17 @@ const UI = {
     this._builds = null;
     this._startTime = null;
     this._client = null;
+  },
+
+  _showPullRequest(pullRequest) {
+    const { prState, prAuthor, prTitle, github } = this._elements;
+    prState.textContent = pullRequest.state;
+    prState.classList.add('state', pullRequest.state);
+    prAuthor.textContent = pullRequest.author;
+    prAuthor.href = pullRequest.authorUrl;
+    prTitle.textContent = pullRequest.title;
+    prTitle.href = pullRequest.url;
+    github.classList.remove('hidden');
   },
 
   _showBuild(rev) {

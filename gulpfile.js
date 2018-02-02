@@ -20,7 +20,9 @@ var scriptsEntries = [
   'app/scripts/build.js',
   'app/scripts/buildbot_client.js',
   'app/scripts/config.js',
+  'app/scripts/github.js',
   'app/scripts/main.js',
+  'app/scripts/pullrequest.js',
   'app/scripts/ui.js'
 ];
 
