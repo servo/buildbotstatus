@@ -15,16 +15,25 @@
     <![endif]-->
     <div id="settings-icon" class="settings-icon"></div>
     <div id="settings" class="settings">
-      <h1>Settings</h1>
+      <h2>Settings</h2>
       <select id="workers">
         <option value="" disabled selected>Number of workers</option>
       </select>
     </div>
     <div class="hero-unit">
-      <h1>Servo CI status</h1>
+      <h2>Servo pull request status</h2>
       <input id="pull-request-id" type="text" placeholder="Pull request ID">
       <button id="get-status">Get status</button>
       <button id="cancel" class="hidden">Cancel</button>
+      <div id="github" class="github hidden">
+        <div id="pr-state"></div>
+        <div class="author">
+          <a href="" target="_blank" id="pr-author"></a>
+        </div>
+        <div class="title">
+          <a href="" target="_blank" id="pr-title"></a>
+        </div>
+      </div>
       <p id="in-progress" class="hidden">Fetching builds. This may take a few minutes...</p>
       <div id="content" class="content hidden">
         <div id="builds"></div>
