@@ -128,6 +128,7 @@ const UI = {
       let label = build.builder;
       let a = document.createElement('a');
       a.href = `${BUILD_BASE_PATH}${build.builder}/builds/${build.id}`;
+      a.target = '_blank';
       a.title = build.builder;
       const title = document.createTextNode(build.builder);
       a.appendChild(title);
