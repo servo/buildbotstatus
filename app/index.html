@@ -34,7 +34,6 @@
           <a href="" target="_blank" id="pr-title"></a>
         </div>
       </div>
-      <p id="in-progress" class="hidden">Fetching builds. This may take a few minutes...</p>
       <div id="content" class="content hidden">
         <div id="builds"></div>
         <div id="spinner" class="spinner hidden">
@@ -42,6 +41,7 @@
           <div class="double-bounce2"></div>
         </div>
         <p id="not-found" class="centered hidden">No builds found for the given pull request ID</p>
+        <p id="progress" class="centered hidden">Fetching <span id="progress-build"></span> - Total progress <span id="progress-total"></span>%</p>
       </div>
       <div id="time" class="time hidden">Last request took <span id="seconds">an unknown number of</span> seconds</div>
     </div>

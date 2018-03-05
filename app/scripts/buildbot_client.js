@@ -22,18 +22,26 @@ export class BuildbotClient {
     this._onprogress = this.onprogress.bind(this);
     this._maxWorkers = workers && workers <= MAX_WORKERS ? workers
                                                          : DEFAULT_WORKERS;
+    this._fetchedBuilds = 0;
   }
 
   /**
    * Get the list of builds associated with a specific pull request.
    *
    * @param {string} pullRequestId Unique identifier of a Servo pull request.
+   * @param {Function} onprogressCb Function called every time the client
+   *                                fetches and checks a build.
+   * @param {Function} onbuildCb Function called every time the client fetches
+   *                             a build associated with the pull request number given by the user.
+   * @param {Function} ondoneCb Function called once the client is done
+   *                            fetching builds.
    * @return {Promise<>} A promise resolving with the list of builds associated with the given pull request ID.
    * @throws {Promise<>} The promise could reject with an error if something goes wrong fetching the builds.
    */
-  fetchBuilds(pullRequestId, onprogressCb, ondoneCb) {
+  fetchBuilds(pullRequestId, onprogressCb, onbuildCb, ondoneCb) {
     this._pullRequestId = pullRequestId;
     this._onprogressCb = onprogressCb;
+    this._onbuildCb = onbuildCb;
     this._ondoneCb = ondoneCb;
     // Create a pool of worker threads. Each build request will be passed to the
     // pool which it will queue and pass to the next idle worker thread.
@@ -43,6 +51,13 @@ export class BuildbotClient {
     // and display.
     return this._fetchBuilders()
     .then(builders => {
+      this._numberOfBuilds = 0;
+      Object.keys(builders).map(builder => {
+        const builds = builders[builder].cachedBuilds.length;
+        if (builds) {
+          this._numberOfBuilds += builds;
+        }
+      });
       // FIXME (ferjm): check that we really want to fetch from all the builders.
       if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
         navigator.serviceWorker.controller.postMessage('current');
@@ -77,6 +92,7 @@ export class BuildbotClient {
 
   _cleanup() {
     this._onprogressCb = null;
+    this._onbuildCb = null;
     this._ondoneCb = null;
     this._pullRequestId = null;
     if (!this._pool) {
@@ -90,6 +106,12 @@ export class BuildbotClient {
   }
 
   onprogress(build) {
+    this._fetchedBuilds++;
+    this._onprogressCb({
+      builder: build.builderName,
+      number: build.number,
+      progress: parseInt((this._fetchedBuilds / this._numberOfBuilds) * 100)
+    });
     // For each build fetched from the server we get a progress
     // event with the details of that build.
     const changes = build.sourceStamps[0].changes;
@@ -109,8 +131,8 @@ export class BuildbotClient {
       start: build.times[0],
       end: build.times[1]
     });
-    if (this._onprogressCb) {
-      this._onprogressCb(_build);
+    if (this._onbuildCb) {
+      this._onbuildCb(_build);
     }
   }
 

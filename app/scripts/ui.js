@@ -10,7 +10,6 @@ const UI = {
     ['workers',
      'pull-request-id',
      'get-status',
-     'in-progress',
      'cancel',
      'spinner',
      'content',
@@ -21,7 +20,10 @@ const UI = {
      'github',
      'pr-state',
      'pr-author',
-     'pr-title'].forEach(id => {
+     'pr-title',
+     'progress',
+     'progress-build',
+     'progress-total'].forEach(id => {
       const name = id.replace(/-(.)/g, function(str, p1) {
         return p1.toUpperCase();
       });
@@ -43,7 +45,7 @@ const UI = {
     ['getStatus', 'time'].forEach(name => {
       this._elements[name].classList.add('hidden');
     });
-    ['cancel', 'inProgress', 'content', 'spinner'].forEach(name => {
+    ['cancel', 'content', 'spinner'].forEach(name => {
       this._elements[name].classList.remove('hidden');
     });
     this._elements.workers.disabled = true;
@@ -55,6 +57,7 @@ const UI = {
     this._client = new BuildbotClient(this._elements.workers.value);
     this._client.fetchBuilds(id,
                              this.onprogress.bind(this),
+                             this.onbuild.bind(this),
                              this.ondone.bind(this));
 
     this._github = new GithubClient();
@@ -73,11 +76,11 @@ const UI = {
 
   cancel() {
     ['cancel',
-      'inProgress',
-      'content',
-      'spinner',
-      'notFound',
-      'github'].forEach(name => {
+     'content',
+     'spinner',
+     'notFound',
+     'github',
+     'progress'].forEach(name => {
       this._elements[name].classList.add('hidden');
     });
     this._elements.prState.classList.remove('state');
@@ -172,7 +175,16 @@ const UI = {
     }
   },
 
-  onprogress(build) {
+  onprogress(progress) {
+    this._elements.progressBuild.textContent =
+      `${progress.builder}/${progress.number}`;
+    this._elements.progressTotal.textContent = `${progress.progress}`;
+    if (this._elements.progress.classList.contains('hidden')) {
+      this._elements.progress.classList.remove('hidden');;
+    }
+  },
+
+  onbuild(build) {
     const rev = build.revision;
     if (!rev) {
       console.warn("Invalid build", build);
@@ -189,7 +201,7 @@ const UI = {
 
     this._elements.seconds.textContent = (Date.now() - this._startTime) / 1000;
 
-    ['cancel', 'inProgress', 'spinner'].forEach(name => {
+    ['cancel', 'spinner', 'progress'].forEach(name => {
       this._elements[name].classList.add('hidden');
     });
     ['getStatus', 'time'].forEach(name => {
