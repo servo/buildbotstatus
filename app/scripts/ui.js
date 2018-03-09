@@ -149,11 +149,11 @@ const UI = {
       }
       tr.appendChild(td);
 
-      if(!startTime) {
+      if (!startTime) {
         startTime = build.start * 1000;
       }
 
-      if(!endTime || endTime < build.end * 1000) {
+      if (!endTime || endTime < build.end * 1000) {
         endTime = build.end * 1000;
       }
 
@@ -178,18 +178,20 @@ const UI = {
 
     buildEl.appendChild(expand);
     buildEl.appendChild(title);
-    if(startTime) {
+    if (startTime) {
       let buildsStartTime = document.createElement('div');
       buildsStartTime.classList.add('timestamp');
       buildsStartTime.textContent = "First build started at: " + new Date(startTime).toString().slice(4, 24);
       buildEl.appendChild(buildsStartTime);
     }
-    if(!inProg) {
-      let buildsEndTime = document.createElement('div');
-      buildsEndTime.classList.add('timestamp');
+    let buildsEndTime = document.createElement('div');
+    buildsEndTime.classList.add('timestamp');
+    if (!inProg) {
       buildsEndTime.textContent = "Last build ended at: " + new Date(endTime).toString().slice(4, 24);
-      buildEl.appendChild(buildsEndTime);
+    } else {
+      buildsEndTime.textContent = "Builds in-progress";
     }
+    buildEl.appendChild(buildsEndTime);
     buildEl.appendChild(details);
 
     this._elements.builds.appendChild(buildEl);
