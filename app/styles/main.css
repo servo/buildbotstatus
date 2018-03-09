@@ -261,6 +261,11 @@ select:focus {
   font-weight: lighter;
 }
 
+.timestamp {
+  display: block;
+  margin-left: 45px;
+}
+
 .github .state {
   display: inline-block;
   padding: 4px 8px;
