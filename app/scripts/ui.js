@@ -120,6 +120,8 @@ const UI = {
     title.classList.add('title');
     title.textContent = rev;
 
+    let startTime, endTime, inProg = false;
+
     let table = document.createElement('table');
     let tr = document.createElement('tr');
     let details = document.createElement('div');
@@ -139,12 +141,22 @@ const UI = {
 
       if (build.inprogress) {
         td.classList.add('inprogress');
+        inProg = true;
       } else if (build.success) {
         td.classList.add('success');
       } else {
         td.classList.add('error');
       }
       tr.appendChild(td);
+
+      if (!startTime) {
+        startTime = build.start * 1000;
+      }
+
+      if (!endTime || endTime < build.end * 1000) {
+        endTime = build.end * 1000;
+      }
+
     });
     table.appendChild(tr);
     details.appendChild(table);
@@ -166,6 +178,20 @@ const UI = {
 
     buildEl.appendChild(expand);
     buildEl.appendChild(title);
+    if (startTime) {
+      let buildsStartTime = document.createElement('div');
+      buildsStartTime.classList.add('timestamp');
+      buildsStartTime.textContent = "First build started at: " + new Date(startTime).toString().slice(4, 24);
+      buildEl.appendChild(buildsStartTime);
+    }
+    let buildsEndTime = document.createElement('div');
+    buildsEndTime.classList.add('timestamp');
+    if (!inProg) {
+      buildsEndTime.textContent = "Last build ended at: " + new Date(endTime).toString().slice(4, 24);
+    } else {
+      buildsEndTime.textContent = "Builds in-progress";
+    }
+    buildEl.appendChild(buildsEndTime);
     buildEl.appendChild(details);
 
     this._elements.builds.appendChild(buildEl);
