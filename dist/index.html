@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Servo CI Status</title>
+
+    <link rel="stylesheet" href="styles/main.css">
+
+  </head>
+  <body>
+    <!--[if IE]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://www.mozilla.org/en-US/firefox/new/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div id="settings-icon" class="settings-icon"></div>
+    <div id="settings" class="settings">
+      <h2>Settings</h2>
+      <select id="workers">
+        <option value="" disabled selected>Number of workers</option>
+      </select>
+    </div>
+    <div class="hero-unit">
+      <h2>Servo pull request status</h2>
+      <input id="pull-request-id" type="text" placeholder="Pull request ID">
+      <button id="get-status">Get status</button>
+      <button id="cancel" class="hidden">Cancel</button>
+      <div id="github" class="github hidden">
+        <div id="pr-state"></div>
+        <div class="author">
+          <a href="" target="_blank" id="pr-author"></a>
+        </div>
+        <div class="title">
+          <a href="" target="_blank" id="pr-title"></a>
+        </div>
+      </div>
+      <div id="content" class="content hidden">
+        <div id="builds"></div>
+        <div id="spinner" class="spinner hidden">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+        <p id="not-found" class="centered hidden">No builds found for the given pull request ID</p>
+        <p id="progress" class="centered hidden">Fetching <span id="progress-build"></span> - Total progress <span id="progress-total"></span>%</p>
+      </div>
+      <div id="time" class="time hidden">Last request took <span id="seconds">an unknown number of</span> seconds</div>
+    </div>
+
+    <script src="vendor/sw-toolbox/companion.js" data-service-worker="sw.js"></script>
+    <script src="vendor/threads.browser.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
