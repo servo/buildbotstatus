@@ -1,6 +1,6 @@
 {
   "name": "buildbotstatus",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple webapp to fetch and browse the status of Servo builds",
   "author": "",
   "license": "MPL-2.0",
