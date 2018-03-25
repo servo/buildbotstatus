@@ -39,7 +39,6 @@ const UI = {
   getStatus() {
     const id = this._elements.pullRequestId.value;
     if (!id || !id.length) {
-      // XXX error feedback. Paint input in red.
       return;
     }
     ['getStatus', 'time'].forEach(name => {
