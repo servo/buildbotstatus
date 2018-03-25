@@ -35,13 +35,16 @@ const UI = {
     this._elements.getStatus.addEventListener('click', this.getStatus.bind(this));
     this._elements.cancel.addEventListener('click', this.cancel.bind(this));
 
-    const pullParamValue = this._getUrlParameter("pull")
-    this._fillPullRequest(pullParamValue)
-    this.getStatus(pullParamValue)
+    const pullRequestId = this._getUrlParameter('pull');
+    if (!pullRequestId) {
+      return;
+    }
+    this._elements.pullRequestId.value = pullRequestId;
+    this.getStatus(pullRequestId);
   },
 
-  getStatus(pullRequestId = "") {
-    const id = (pullRequestId.length ? pullRequestId : this._elements.pullRequestId.value)
+  getStatus(pullRequestId) {
+    const id = typeof pullRequestId == 'string' ? pullRequestId : this._elements.pullRequestId.value;
     
     if (!id || !id.length) {
       // XXX error feedback. Paint input in red.
@@ -96,27 +99,17 @@ const UI = {
 
     this._cleanup();
   },
-  
+
   _cleanup() {
     this._builds = null;
     this._startTime = null;
     this._client = null;
   },
 
-  _fillPullRequest(pullRequestId = "") {
-    if (pullRequestId.length) {
-      this._elements.pullRequestId.value = pullRequestId
-    }
-  },
-
   _getUrlParameter(paramName) {
-    const url = window.location.href;
-    const regex = new RegExp("[?&]" + paramName + "=([^&#]*)|&|#|$")
-    const matches = regex.exec(url);
-
-    if (! matches ) return null;
-    if (! matches[1] ) return '';
-    return decodeURIComponent(matches[1].replace(/\+/g, " "));
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search.slice(1));
+    return params.get(paramName);
   },
 
   _showPullRequest(pullRequest) {
