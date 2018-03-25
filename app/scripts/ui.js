@@ -32,15 +32,22 @@ const UI = {
 
     this._initWorkersSelect(this._elements.workers);
 
-    this._elements.getStatus.addEventListener('click', this.getStatus.bind(this));
+    this._elements.getStatus.addEventListener('click', () => {
+      window.location.hash = "#" + this._elements.pullRequestId.value;
+    });
     this._elements.cancel.addEventListener('click', this.cancel.bind(this));
+    this.getStatus();
   },
 
   getStatus() {
-    const id = this._elements.pullRequestId.value;
-    if (!id || !id.length) {
+    this.cancel();
+
+    const id = parseInt(window.location.hash.substring(1), 10);
+    if (isNaN(id))
       return;
-    }
+
+    this._elements.pullRequestId.value = id;
+
     ['getStatus', 'time'].forEach(name => {
       this._elements[name].classList.add('hidden');
     });
@@ -86,7 +93,10 @@ const UI = {
     this._elements.getStatus.classList.remove('hidden');
     this._elements.workers.disabled = undefined;
 
-    this._client.cancel();
+    // Handle gracefully the case we're not cancelling anything, and just make
+    // sure the UI is consistent.
+    if (this._client)
+      this._client.cancel();
 
     this._cleanup();
   },
@@ -95,6 +105,7 @@ const UI = {
     this._builds = null;
     this._startTime = null;
     this._client = null;
+    this._github = null;
   },
 
   _showPullRequest(pullRequest) {
