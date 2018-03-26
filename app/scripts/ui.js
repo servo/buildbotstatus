@@ -32,7 +32,7 @@ const UI = {
 
     this._initWorkersSelect(this._elements.workers);
 
-    this._elements.getStatus.addEventListener('click', this.getStatus.bind(this));
+    this._elements.getStatus.addEventListener('click', () => this.getStatus());
     this._elements.cancel.addEventListener('click', this.cancel.bind(this));
 
     const pullRequestId = this._getUrlParameter('pull');
@@ -44,7 +44,7 @@ const UI = {
   },
 
   getStatus(pullRequestId) {
-    const id = typeof pullRequestId == 'string' ? pullRequestId : this._elements.pullRequestId.value;
+    const id = pullRequestId || this._elements.pullRequestId.value;
     
     if (!id || !id.length) {
       // XXX error feedback. Paint input in red.
