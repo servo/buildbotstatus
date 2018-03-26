@@ -32,12 +32,20 @@ const UI = {
 
     this._initWorkersSelect(this._elements.workers);
 
-    this._elements.getStatus.addEventListener('click', this.getStatus.bind(this));
+    this._elements.getStatus.addEventListener('click', () => this.getStatus());
     this._elements.cancel.addEventListener('click', this.cancel.bind(this));
+
+    const pullRequestId = this._getUrlParameter('pull');
+    if (!pullRequestId) {
+      return;
+    }
+    this._elements.pullRequestId.value = pullRequestId;
+    this.getStatus(pullRequestId);
   },
 
-  getStatus() {
-    const id = this._elements.pullRequestId.value;
+  getStatus(pullRequestId) {
+    const id = pullRequestId || this._elements.pullRequestId.value;
+    
     if (!id || !id.length) {
       return;
     }
@@ -95,6 +103,12 @@ const UI = {
     this._builds = null;
     this._startTime = null;
     this._client = null;
+  },
+
+  _getUrlParameter(paramName) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search.slice(1));
+    return params.get(paramName);
   },
 
   _showPullRequest(pullRequest) {
