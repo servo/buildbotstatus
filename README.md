@@ -1,3 +1,5 @@
+Deployed at https://servo.github.io/buildbotstatus
+
 Tool to show the build status of a Servo PR.
 
 ![screenshot](screenshot.png)
