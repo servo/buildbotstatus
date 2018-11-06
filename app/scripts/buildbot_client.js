@@ -8,7 +8,7 @@ const SUCCESS = 'successful';
 
 /**
  * Servo's Buildbot JSON API client.
- * Reference: http://build.servo.org/json/help
+ * Reference: https://build.servo.org/json/help
  */
 export class BuildbotClient {
   /**
