@@ -10,7 +10,7 @@
  */
 
 /**
- * Represents a build from http://build.servo.org/
+ * Represents a build from https://build.servo.org/
  */
 class Build {
   /**

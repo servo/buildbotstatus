@@ -2,7 +2,7 @@ import { BuildbotClient } from './buildbot_client.js';
 import { GithubClient } from './github.js';
 import { DEFAULT_WORKERS, MAX_WORKERS } from './config';
 
-const BUILD_BASE_PATH = 'http://build.servo.org/builders/';
+const BUILD_BASE_PATH = 'https://build.servo.org/builders/';
 
 const UI = {
   init() {
